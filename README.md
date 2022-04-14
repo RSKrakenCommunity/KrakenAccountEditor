@@ -17,7 +17,7 @@
    
 <!-- PROJECT Name -->
 # KrakenAccountEditor
-
+![image](https://user-images.githubusercontent.com/2714425/163483929-0cf79f67-d02c-47d2-bec2-7a9e5ef7e37f.png)
 <!-- ABOUT THE PROJECT -->
 ### About The Project
 ###### A Standalone editor for kraken accounts, this editor utilizes the import accounts feature which supports json format.

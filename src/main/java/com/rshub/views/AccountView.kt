@@ -2,7 +2,12 @@ package com.rshub.views
 
 import com.rshub.models.AccountModel
 import com.rshub.models.AccountsModel
+import javafx.geometry.Pos
 import javafx.scene.control.ButtonType
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.paint.Color
+import javafx.scene.text.Font
+import javafx.scene.text.FontWeight
 import javafx.stage.FileChooser
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -78,44 +83,57 @@ class AccountView : View("Accounts") {
             }
         }
         center {
-            hbox {
+            vbox {
                 spacing = 10.0
-                listview<AccountModel> {
-                    items.bind(model.accounts) { it }
-                    bindSelected(model.selectedAccount)
-                    cellFormat { textProperty().bind(it.email) }
-                    items.onChange {
-                        if (it.next() && it.wasAdded()) {
-                            selectionModel.select(it.addedSubList.single())
+                label("The file accounts.json is not encrypted. You are responsible for not leaking your accounts. Do not share your accounts.json with anyone.") {
+                    isWrapText = true
+                    textFill = Color.RED
+                    style {
+                        font = Font.font(12.0)
+                        fontWeight = FontWeight.BOLD
+                    }
+                    paddingAll = 5.0
+                    alignment = Pos.CENTER
+                }
+                hbox {
+                    spacing = 10.0
+                    listview<AccountModel> {
+                        items.bind(model.accounts) { it }
+                        bindSelected(model.selectedAccount)
+                        cellFormat { textProperty().bind(it.email) }
+                        items.onChange {
+                            if (it.next() && it.wasAdded()) {
+                                selectionModel.select(it.addedSubList.single())
+                            }
                         }
                     }
-                }
-                vbox {
-                    paddingAll = 10.0
-                    dynamicContent(model.selectedAccount) {
-                        if (it != null) {
-                            form {
-                                fieldset("Account") {
-                                    field("Username") {
-                                        textfield(it.email)
-                                    }
-                                    field("Password") {
-                                        passwordfield(it.password)
-                                    }
-                                }
-                                fieldset("Settings") {
-                                    field("World") {
-                                        textfield(it.world) {
-                                            stripNonInteger()
+                    vbox {
+                        paddingAll = 10.0
+                        dynamicContent(model.selectedAccount) {
+                            if (it != null) {
+                                form {
+                                    fieldset("Account") {
+                                        field("Username") {
+                                            textfield(it.email)
+                                        }
+                                        field("Password") {
+                                            passwordfield(it.password)
                                         }
                                     }
-                                    field("Group") {
-                                        textfield(it.group)
+                                    fieldset("Settings") {
+                                        field("World") {
+                                            textfield(it.world) {
+                                                stripNonInteger()
+                                            }
+                                        }
+                                        field("Group") {
+                                            textfield(it.group)
+                                        }
                                     }
                                 }
+                            } else {
+                                label("No Selected Account.")
                             }
-                        } else {
-                            label("No Selected Account.")
                         }
                     }
                 }

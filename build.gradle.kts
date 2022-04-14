@@ -2,11 +2,12 @@ plugins {
     kotlin("jvm") version "1.6.20"
     kotlin("plugin.serialization") version "1.6.20"
     id("org.openjfx.javafxplugin") version "0.0.12"
+    id("org.beryx.runtime") version "1.12.7"
     application
 }
 
 group = "com.rshub"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
@@ -19,7 +20,30 @@ javafx {
 }
 
 application {
-    mainClass.set("com.rshub.AccountApplication")
+    applicationName = "Kraken Account Editor"
+    mainClass.set("com.rshub.Application")
+}
+
+runtime {
+    options.set(listOf("--compress", "2", "--no-header-files", "--no-man-pages"))
+    launcher {
+        noConsole = true
+    }
+    jpackage {
+        imageOptions = listOf("--icon", "src/main/resources/icon.ico")
+        installerName = "Kraken Account Editor"
+        installerOptions = listOf(
+            "--vendor",
+            "Kraken Community",
+            "--win-menu",
+            "--win-shortcut",
+            "--resource-dir",
+            "src/main/resources",
+            "--win-per-user-install",
+            "--win-dir-chooser"
+        )
+        isSkipInstaller = false
+    }
 }
 
 dependencies {

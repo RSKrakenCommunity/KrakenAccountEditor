@@ -22,11 +22,13 @@
 ### About The Project
 ###### A Standalone editor for kraken accounts, this editor utilizes the import accounts feature which supports json format.
 
+###### Start by adding your account infomation into the editor and then save to the directory of your choice. Then go to Kraken file >settings and use the import function to add the accounts into kraken. 
+
+![image](https://user-images.githubusercontent.com/2714425/163486989-b4c6959b-763d-4e4c-817f-8fe295b94f3a.png)
+
 ```diff
 - account.json is not encrypted. You are responsible for not leaking your accounts. Do not share your account.json with anyone.
-
 ```
-account.json is not encrypted. You are responsible for not leaking your accounts. Do not share your account.json with anyone.
 
 <!-- Support -->
 ### Support

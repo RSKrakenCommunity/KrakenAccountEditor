@@ -4,14 +4,13 @@ import com.rshub.models.AccountModel
 import com.rshub.models.AccountsModel
 import javafx.geometry.Pos
 import javafx.scene.control.ButtonType
-import javafx.scene.layout.BackgroundFill
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.stage.FileChooser
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.*
 import tornadofx.*
 import java.io.File
 import java.nio.file.Files
@@ -40,9 +39,10 @@ class AccountView : View("Accounts") {
                             ).singleOrNull()
                             if (file != null) {
                                 val text = file.readText()
-                                val accounts = Json.decodeFromString<List<AccountModel>>(text)
+                                val accounts = Json.decodeFromString<JsonObject>(text)
+                                val accs = accounts["Accounts"]?.jsonArray ?: return@setOnAction
                                 model.accounts.clear()
-                                model.accounts.addAll(accounts)
+                                model.accounts.addAll(Json.decodeFromJsonElement<Array<AccountModel>>(accs))
                             }
                         }
                     }
@@ -55,7 +55,14 @@ class AccountView : View("Accounts") {
                                 "accounts.json",
                                 FileChooserMode.Save
                             ).single()
-                            Files.write(file.toPath(), Json.encodeToString(model.accounts.toList()).toByteArray())
+
+                            Files.write(file.toPath(), Json.encodeToString(buildJsonObject {
+                                putJsonArray("Accounts") {
+                                    for (account in model.accounts) {
+                                        add(Json.encodeToJsonElement(account))
+                                    }
+                                }
+                            }).toByteArray())
                         }
                     }
                 }
@@ -103,7 +110,7 @@ class AccountView : View("Accounts") {
                         cellFormat { textProperty().bind(it.email) }
                         items.onChange {
                             if (it.next() && it.wasAdded()) {
-                                selectionModel.select(it.addedSubList.single())
+                                selectionModel.select(it.addedSubList.first())
                             }
                         }
                     }

@@ -9,10 +9,10 @@ import kotlinx.serialization.encoding.*
 
 object AccountModelSerializer : KSerializer<AccountModel> {
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Account") {
-        element<String>("email")
-        element<String>("password")
-        element<String>("group")
-        element<Int>("world")
+        element<String>("Username")
+        element<String>("Password")
+        element<String>("Group")
+        element<Int>("World")
     }
 
     override fun serialize(encoder: Encoder, value: AccountModel) {
